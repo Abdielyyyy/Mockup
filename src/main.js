@@ -31,7 +31,7 @@ const icons = {
 };
 const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] || icons.arrow}</svg>`;
 const brand = () => `<img class="ojk-logo" src="${ojkLogo}" alt="OJK — Otoritas Jasa Keuangan" width="1877" height="838">`;
-const pages = { home: 'Beranda', know: 'Know Your PVML', health: 'Tingkat Kesehatan PVML', supervisory: 'Supervisory Plan' };
+const pages = { home: 'Beranda', know: 'Know Your Financial Institution', health: 'Tingkat Kesehatan PVML', supervisory: 'Supervisory Plan' };
 let activePage = 'home';
 let userName = 'Pengguna';
 try { userName = sessionStorage.getItem('pvml-user') || 'Pengguna'; } catch {}
@@ -121,7 +121,7 @@ function knowPage() {
     ['layers', '02', 'Modal Ventura', 'Mendampingi pertumbuhan dan pengembangan usaha.', 'Perusahaan modal ventura membantu pengembangan usaha melalui penyertaan modal dan/atau pembiayaan sesuai ketentuan yang berlaku.'],
     ['shield', '03', 'Lembaga Keuangan Mikro', 'Memperluas akses keuangan bagi masyarakat.', 'Lembaga keuangan mikro memberikan layanan keuangan untuk mendukung usaha mikro dan pemberdayaan masyarakat.'],
   ];
-  return `<div class="page-heading"><div><div class="section-tag">MENGENAL LEBIH DEKAT</div><h1>Know Your PVML<span class="heading-dot">.</span></h1><p class="muted">Kenali sektor, pahami perannya, temukan perspektif yang lebih luas.</p></div><span class="outline-badge">${icon('book')} Pusat pengenalan</span></div>
+  return `<div class="page-heading"><div><div class="section-tag">MENGENAL LEBIH DEKAT</div><h1>Know Your Financial Institution<span class="heading-dot">.</span></h1><p class="muted">Kenali sektor, pahami perannya, temukan perspektif yang lebih luas.</p></div><span class="outline-badge">${icon('book')} Pusat pengenalan</span></div>
     <section class="intro-card"><div class="intro-icon">${icon('layers')}</div><div><span class="section-tag">SEKILAS TENTANG PVML</span><h2>Beragam peran. Satu ekosistem.</h2><p>PVML mencakup sektor pembiayaan, modal ventura, lembaga keuangan mikro, serta lembaga jasa keuangan lainnya. Portal ini menjadi titik awal untuk mengenal ekosistem tersebut.</p></div></section>
     <div class="section-heading"><h2>Kenali beberapa sektornya</h2><span>Pilih kartu untuk membaca lebih lanjut.</span></div>
     <div class="sector-grid">${sectors.map(([name, number, title, description, detail]) => `<details class="sector-card"><summary><div class="card-top"><span class="card-icon">${icon(name)}</span><span class="card-index">${number}</span></div><h3>${title}</h3><p>${description}</p><span class="card-link"><span class="detail-closed">Baca lebih lanjut</span><span class="detail-open">Tutup penjelasan</span>${icon('chevron')}</span></summary><div class="sector-detail">${detail}</div></details>`).join('')}</div>

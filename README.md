@@ -20,9 +20,9 @@ npm run build
 npm run preview
 ```
 
-Alur: login → Beranda → Know Your PVML / Tingkat Kesehatan PVML / Supervisory Plan. Gunakan email valid dan kata sandi apa pun, atau tombol **Coba akun demo**. Login hanya simulasi; kata sandi tidak disimpan atau dikirim. Nama pengguna demo disimpan di sessionStorage hingga keluar atau sesi browser berakhir.
+Alur: login → Beranda → Know Your Financial Institution / Tingkat Kesehatan PVML / Supervisory Plan. Gunakan email valid dan kata sandi apa pun, atau tombol **Coba akun demo**. Login hanya simulasi; kata sandi tidak disimpan atau dikirim. Nama pengguna demo disimpan di sessionStorage hingga keluar atau sesi browser berakhir.
 
-Menu Know Your PVML menyediakan kartu pengenalan yang bisa dibuka. Menu **Tingkat Kesehatan PVML** membuka daftar perusahaan secara langsung, tanpa submenu. Alurnya: **Tingkat Kesehatan PVML → pilih perusahaan → daftar kertas kerja → ikon pensil → output penilaian TKS**.
+Menu Know Your Financial Institution menyediakan kartu pengenalan yang bisa dibuka. Menu **Tingkat Kesehatan PVML** membuka daftar perusahaan secara langsung, tanpa submenu. Alurnya: **Tingkat Kesehatan PVML → pilih perusahaan → daftar kertas kerja → ikon pensil → output penilaian TKS**.
 
 Pilih **PT Sarana Kalteng Ventura** untuk membuka daftar 25 kertas kerja dalam lima kelompok: Profil Risiko (9), Tata Kelola (13), Rentabilitas (1), Permodalan (1), dan TKS (1). Kelompok dapat dibuka/tutup. Setiap baris memiliki status, ikon kaca pembesar untuk melihat kertas kerja, dan ikon pensil untuk langsung membuka output penilaian TKS perusahaan yang dipilih. Tombol kembali pada output membuka daftar kertas kerja perusahaan yang sama dan mengembalikan fokus ke ikon pensil asal. Status awal merupakan simulasi: 24 selesai dan TKS dalam proses review.
 
