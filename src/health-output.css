@@ -1,0 +1,48 @@
+.output-company-bar { margin-bottom:20px; }
+.output-worksheet .worksheet-heading { padding:21px 24px; }
+.output-worksheet .worksheet-heading h2 { font-size:15px; font-weight:650; }
+.output-review-status { display:inline-flex; align-items:center; gap:6px; padding:6px 9px; border:1px solid #f1d9df; border-radius:5px; background:#fcf0f2; color:#b75b6c; font-size:8px; white-space:nowrap; }
+.output-review-status i { width:4px; height:4px; border-radius:50%; background:var(--red); }
+.output-section-divider { margin:0 24px 20px; border-top:2px solid #e7e7ed; border-bottom:1px solid #eeeef3; padding:8px 14px; }
+.output-section-divider>span { display:inline-block; background:#eeeef3; border-radius:3px; padding:3px 8px; color:#777784; font-size:9px; }
+.output-assessment-table tbody th { font-size:11px; }
+.output-assessment-table td { position:relative; }
+.output-assessment-table .composite-score { font-size:14px; }
+.output-assessment-table td.not-applicable { background:#e3e3e9; }
+.output-reference-row { padding:15px 25px 23px; display:flex; align-items:center; justify-content:space-between; gap:15px; }
+.output-reference-row .text-button { font-size:10px; text-align:left; }
+.output-reference-row .icon { width:14px; height:14px; }
+.output-reference-row>span { font-size:8px; color:#a1a1ad; }
+.output-footer { display:flex; align-items:flex-start; justify-content:space-between; gap:25px; margin:18px 2px 0; }
+.output-footer p { color:#a0a0ac; font-size:9px; line-height:1.9; max-width:740px; }
+.output-footer .button { font-size:10px; min-height:40px; white-space:nowrap; }
+.output-reference-dialog { width:calc(100% - 40px); max-width:520px; border:1px solid var(--border); border-radius:12px; padding:34px; max-height:calc(100dvh - 40px); overflow:auto; color:var(--ink); box-shadow:0 25px 100px #0002; }
+.output-reference-dialog::backdrop { background:#19191f66; backdrop-filter:blur(3px); }
+.output-reference-close { position:absolute; right:12px; top:12px; }
+.output-reference-dialog .section-tag { font-size:8px; margin:0 30px 15px 0; }
+.output-reference-dialog h2 { font-size:24px; letter-spacing:-.7px; line-height:1.5; }
+.output-reference-dialog p { font-size:11px; line-height:1.9; color:#9999a6; margin:15px 0 22px; }
+.output-reference-dialog table { width:100%; border:1px solid #e4e4eb; border-collapse:collapse; font-size:11px; color:#7a7a87; }
+.output-reference-dialog th,.output-reference-dialog td { border:1px solid #e4e4eb; padding:12px 15px; text-align:left; font-weight:400; }
+.output-reference-dialog thead th { font-size:10px; background:#f8f8fa; font-weight:500; }
+.output-reference-dialog tbody th { width:95px; color:var(--red); font-weight:600; }
+.output-reference-dialog p.output-reference-note { font-size:9px; margin:18px 0; }
+.output-reference-done { width:100%; margin-top:5px; min-height:42px; font-size:11px; }
+@media(max-width:1150px) {
+  .output-footer { flex-direction:column; gap:15px; }
+  .output-worksheet .worksheet-badges { margin-left:45px; }
+}
+@media(max-width:650px) {
+  .output-worksheet .worksheet-heading { padding:20px; }
+  .output-worksheet .worksheet-heading h2 { font-size:14px; }
+  .output-worksheet .worksheet-badges { margin-left:0; }
+  .output-section-divider { margin-inline:20px; margin-bottom:16px; }
+  .output-reference-row { align-items:flex-start; flex-direction:column; gap:13px; padding:18px 20px 22px; }
+  .output-reference-row .text-button { font-size:9px; gap:8px; }
+  .output-reference-row>span { font-size:8px; }
+  .output-footer p { font-size:8px; }
+  .output-footer .button { font-size:9px; }
+  .output-reference-dialog { padding:28px 23px; }
+  .output-reference-dialog h2 { font-size:22px; }
+  .output-reference-dialog p { font-size:10px; }
+}
