@@ -40,11 +40,11 @@ try { if (sessionStorage.getItem(sessionKey) === dummyAccount.username) userName
 const escapeHTML = (value) => value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 function login() {
-  document.title = 'Masuk — Sistem Pengawasan PVML';
+  document.title = 'Masuk — Sistem Informasi Pengawasan PVML';
   app.innerHTML = `<main class="login-layout">
     <section class="login-story login-supervision">
       <div class="login-decoration" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="login-identity"><div class="brand">${brand()}</div><h1>Sistem Pengawasan<br><span>PVML</span></h1></div>
+      <div class="login-identity"><div class="brand">${brand()}</div><h1>Sistem Informasi Pengawasan<br><span>PVML</span></h1></div>
     </section>
     <section class="login-form-area">
       <span class="mockup-label"><span></span> MOCKUP INTERAKTIF</span>
@@ -59,7 +59,7 @@ function login() {
         </form>
         <div class="demo-notice">${icon('shield')}<span>Mode demonstrasi. Tidak terhubung ke sistem OJK<br>dan tidak menyimpan kata sandi Anda.</span></div>
       </div>
-      <footer class="login-footer"><span>© ${new Date().getFullYear()} Sistem Pengawasan PVML</span><span>Mockup · Data simulasi</span></footer>
+      <footer class="login-footer"><span>© ${new Date().getFullYear()} Sistem Informasi Pengawasan PVML</span><span>Mockup · Data simulasi</span></footer>
     </section>
   </main><div id="modal-root"></div>`;
   document.querySelector('#login-form').addEventListener('submit', event => {
@@ -110,7 +110,7 @@ function shell() {
     </aside>
     <div class="workspace"><header class="topbar"><div class="breadcrumb"><button id="mobile-menu" class="icon-button" aria-label="Buka navigasi" aria-expanded="false">${icon('menu')}</button><span>Pengawasan PVML</span>${icon('chevron')}<strong id="breadcrumb-current">${pages[activePage]}</strong></div><div class="topbar-right"><span class="demo-pill"><span></span> Mode demo</span><button class="icon-button help-button" data-help="portal" aria-label="Tentang portal">${icon('help')}</button><span class="header-separator"></span><div class="user-profile"><span class="avatar">${escapeHTML(userName.slice(0, 1).toUpperCase())}</span><span><strong>${escapeHTML(userName)}</strong><small>Akses demonstrasi</small></span></div></div></header>
       <main id="page-content" tabindex="-1"></main>
-      <footer class="app-footer"><span>© ${new Date().getFullYear()} Sistem Pengawasan PVML · Mockup</span><span>Data simulasi <i></i><i></i><i></i></span></footer>
+      <footer class="app-footer"><span>© ${new Date().getFullYear()} Sistem Informasi Pengawasan PVML · Mockup</span><span>Data simulasi <i></i><i></i><i></i></span></footer>
     </div>
   </div><div id="modal-root"></div>`;
   document.querySelector('#logout').addEventListener('click', () => {
@@ -147,7 +147,7 @@ function renderPage(focus = true) {
   document.querySelector('#page-content').innerHTML = activePage === 'home' ? dashboardPage(icon) : activePage === 'know' ? knowPage() : activePage === 'supervisory' ? supervisoryPage(icon) : healthPage(icon);
   const title = activePage === 'health' ? healthPageTitle() : pages[activePage];
   document.querySelector('#breadcrumb-current').textContent = title;
-  document.title = `${title} — Sistem Pengawasan PVML`;
+  document.title = `${title} — Sistem Informasi Pengawasan PVML`;
   document.querySelectorAll('.nav-item[data-page]').forEach(button => {
     const selected = button.dataset.page === activePage;
     button.classList.toggle('active', selected);

@@ -1,6 +1,6 @@
 # Mockup interaktif PVML
 
-Mockup Sistem Pengawasan PVML berbahasa Indonesia dengan logo OJK dan palet merah, hitam, serta putih. Bukan situs resmi OJK.
+Mockup Sistem Informasi Pengawasan PVML berbahasa Indonesia dengan logo OJK dan palet merah, hitam, serta putih. Bukan situs resmi OJK.
 
 Beranda menampilkan simulasi agregat tiga sektor: pembiayaan, modal ventura, dan lembaga keuangan mikro. Indikator mencakup total aset, debitur, cabang, perusahaan, dan pembiayaan/penyertaan. Pilihan periode April–Juni 2026 dan cakupan sektor memperbarui angka, grafik tren, komposisi aset, serta tabel ringkasan. Klik bulan di bawah grafik untuk membaca nilai asetnya. Semua angka agregat merupakan ilustrasi dan terpisah dari contoh kertas kerja PT Sarana Kalteng Ventura.
 
