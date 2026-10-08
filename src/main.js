@@ -32,9 +32,11 @@ const icons = {
 const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] || icons.arrow}</svg>`;
 const brand = () => `<img class="ojk-logo" src="${ojkLogo}" alt="OJK — Otoritas Jasa Keuangan" width="1877" height="838">`;
 const pages = { home: 'Beranda', know: 'Know Your Financial Institution', health: 'Tingkat Kesehatan PVML', supervisory: 'Supervisory Plan' };
+const dummyAccount = { username:'pengawas', password:'PVML2026!', name:'Pengawas Demo' };
+const sessionKey = 'pvml-demo-user';
 let activePage = 'home';
 let userName = 'Pengguna';
-try { userName = sessionStorage.getItem('pvml-user') || 'Pengguna'; } catch {}
+try { if (sessionStorage.getItem(sessionKey) === dummyAccount.username) userName = dummyAccount.name; } catch {}
 const escapeHTML = (value) => value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 function login() {
@@ -48,14 +50,13 @@ function login() {
       <span class="mockup-label"><span></span> MOCKUP INTERAKTIF</span>
       <div class="login-form-wrap"><h2>Masuk</h2>
         <form id="login-form">
-          <label for="email">Alamat email</label><div class="input-wrap">${icon('mail')}<input id="email" name="email" type="email" placeholder="nama@lembaga.co.id" autocomplete="username" required maxlength="120"></div>
+          <label for="username">Username</label><div class="input-wrap">${icon('people')}<input id="username" name="username" type="text" placeholder="Masukkan username" autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="120" aria-describedby="login-error"></div>
           <div class="password-label"><label for="password">Kata sandi</label><button type="button" class="text-button" data-help="password">Bantuan masuk</button></div>
-          <div class="input-wrap">${icon('lock')}<input id="password" name="password" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password" required><button type="button" id="toggle-password" class="icon-button" aria-label="Tampilkan kata sandi" aria-pressed="false">${icon('eye')}</button></div>
-          <p class="login-note">Gunakan email dan kata sandi apa pun untuk mencoba mockup.</p>
+          <div class="input-wrap">${icon('lock')}<input id="password" name="password" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password" required aria-describedby="login-error"><button type="button" id="toggle-password" class="icon-button" aria-label="Tampilkan kata sandi" aria-pressed="false">${icon('eye')}</button></div>
+          <p id="login-error" class="login-error" role="alert" hidden></p>
+          <p class="login-note">Masukkan akun dummy untuk masuk. Detail akun tersedia di Bantuan masuk.</p>
           <button class="button primary full" type="submit">Masuk ke sistem ${icon('arrow')}</button>
         </form>
-        <div class="divider"><span>atau gunakan akun demo</span></div>
-        <button class="button secondary full" id="demo-login">Coba akun demo ${icon('arrow')}</button>
         <div class="demo-notice">${icon('shield')}<span>Mode demonstrasi. Tidak terhubung ke sistem OJK<br>dan tidak menyimpan kata sandi Anda.</span></div>
       </div>
       <footer class="login-footer"><span>© ${new Date().getFullYear()} Sistem Pengawasan PVML</span><span>Mockup · Data simulasi</span></footer>
@@ -63,10 +64,24 @@ function login() {
   </main><div id="modal-root"></div>`;
   document.querySelector('#login-form').addEventListener('submit', event => {
     event.preventDefault();
-    const name = document.querySelector('#email').value.split('@')[0].replace(/[._-]/g, ' ');
-    enter(name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Pengguna');
+    const username = document.querySelector('#username');
+    const password = document.querySelector('#password');
+    if (username.value.trim() !== dummyAccount.username || password.value !== dummyAccount.password) {
+      const error = document.querySelector('#login-error');
+      error.textContent = 'Username atau kata sandi salah. Gunakan akun dummy yang tersedia di Bantuan masuk.';
+      error.hidden = false;
+      username.setAttribute('aria-invalid', 'true');
+      password.setAttribute('aria-invalid', 'true');
+      (username.value.trim() !== dummyAccount.username ? username : password).focus();
+      return;
+    }
+    enter(dummyAccount.name);
   });
-  document.querySelector('#demo-login').addEventListener('click', () => enter('Pengguna Demo'));
+  document.querySelectorAll('#username, #password').forEach(input => input.addEventListener('input', () => {
+    document.querySelector('#login-error').hidden = true;
+    document.querySelector('#username').removeAttribute('aria-invalid');
+    document.querySelector('#password').removeAttribute('aria-invalid');
+  }));
   document.querySelector('#toggle-password').addEventListener('click', event => {
     const input = document.querySelector('#password');
     const visible = input.type === 'password';
@@ -82,7 +97,7 @@ function enter(name) {
   userName = name;
   activePage = 'home';
   resetHealthView();
-  try { sessionStorage.setItem('pvml-user', name); } catch {}
+  try { sessionStorage.setItem(sessionKey, dummyAccount.username); } catch {}
   shell();
 }
 
@@ -99,7 +114,7 @@ function shell() {
     </div>
   </div><div id="modal-root"></div>`;
   document.querySelector('#logout').addEventListener('click', () => {
-    try { sessionStorage.removeItem('pvml-user'); } catch {}
+    try { sessionStorage.removeItem(sessionKey); sessionStorage.removeItem('pvml-user'); } catch {}
     login();
   });
   document.querySelector('#mobile-menu').addEventListener('click', () => setSidebar(!document.querySelector('.app-layout').classList.contains('nav-open')));
@@ -156,7 +171,7 @@ function bindHelp() {
   document.querySelectorAll('[data-help]').forEach(button => button.addEventListener('click', () => {
     const password = button.dataset.help === 'password';
     const root = document.querySelector('#modal-root');
-    root.innerHTML = `<dialog class="help-dialog"><button class="icon-button dialog-close" aria-label="Tutup bantuan">${icon('close')}</button><span class="card-icon">${icon('help')}</span><h2>${password ? 'Masuk ke mode demo' : 'Tentang mockup ini'}</h2><p>${password ? 'Masukkan email yang valid dan kata sandi apa pun, atau gunakan tombol “Coba akun demo”. Tidak diperlukan akun sungguhan.' : 'Portal ini adalah mockup interaktif dengan palet merah, hitam, dan putih yang terinspirasi OJK. Ini bukan situs resmi OJK. Halaman tingkat kesehatan menyediakan daftar perusahaan dan kertas kerja penilaian dengan data simulasi berdasarkan contoh Anda.'}</p><button class="button primary dialog-done">Mengerti ${icon('arrow')}</button></dialog>`;
+    root.innerHTML = `<dialog class="help-dialog"><button class="icon-button dialog-close" aria-label="Tutup bantuan">${icon('close')}</button><span class="card-icon">${icon('help')}</span><h2>${password ? 'Akun dummy' : 'Tentang mockup ini'}</h2><p>${password ? `Gunakan akun berikut untuk masuk:<br>Username: <strong>${dummyAccount.username}</strong><br>Kata sandi: <strong>${dummyAccount.password}</strong><br>Masukkan username dan kata sandi pada formulir login.` : 'Portal ini adalah mockup interaktif dengan palet merah, hitam, dan putih yang terinspirasi OJK. Ini bukan situs resmi OJK. Halaman tingkat kesehatan menyediakan daftar perusahaan dan kertas kerja penilaian dengan data simulasi berdasarkan contoh Anda.'}</p><button class="button primary dialog-done">Mengerti ${icon('arrow')}</button></dialog>`;
     const dialog = root.querySelector('dialog');
     dialog.showModal();
     root.querySelectorAll('.dialog-close, .dialog-done').forEach(close => close.onclick = () => dialog.close());
@@ -165,5 +180,5 @@ function bindHelp() {
 }
 
 let existingSession = false;
-try { existingSession = Boolean(sessionStorage.getItem('pvml-user')); } catch {}
+try { existingSession = sessionStorage.getItem(sessionKey) === dummyAccount.username; } catch {}
 if (existingSession) shell(); else login();

@@ -5,6 +5,8 @@
 .output-review-status i { width:4px; height:4px; border-radius:50%; background:var(--red); }
 .output-section-divider { margin:0 24px 20px; border-top:2px solid #e7e7ed; border-bottom:1px solid #eeeef3; padding:8px 14px; }
 .output-section-divider>span { display:inline-block; background:#eeeef3; border-radius:3px; padding:3px 8px; color:#777784; font-size:9px; }
+.output-assessment-table { min-width:620px; }
+.output-assessment-table .factor-column { width:28%; }
 .output-assessment-table tbody th { font-size:11px; }
 .output-assessment-table td { position:relative; }
 .output-assessment-table .composite-score { font-size:14px; }
