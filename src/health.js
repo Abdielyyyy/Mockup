@@ -2,6 +2,7 @@ import './health.css';
 import { worksheetPage, bindWorksheetPage, getTksWorksheetStatus } from './worksheets.js';
 import { outputPage, bindOutputPage } from './health-output.js';
 import { riskAnalysisPage, bindRiskAnalysisPage } from './risk-analysis.js';
+import { assessmentPage, bindAssessmentPage, getAssessmentDefinition } from './assessment.js';
 
 const company = {
   name: 'PT Sarana Kalteng Ventura',
@@ -17,6 +18,7 @@ const company = {
 let selected = false;
 let showingOutput = false;
 let showingRiskAnalysis = false;
+let assessmentId = null;
 let outputOrigin = null;
 let search = '';
 
@@ -24,6 +26,7 @@ export function resetHealthView() {
   selected = false;
   showingOutput = false;
   showingRiskAnalysis = false;
+  assessmentId = null;
   outputOrigin = null;
   search = '';
 }
@@ -43,16 +46,27 @@ function listPage(icon) {
 }
 
 export function healthPage(icon) {
+  if (selected && assessmentId) return assessmentPage(icon, company, assessmentId);
   if (selected && showingRiskAnalysis) return riskAnalysisPage(icon, company);
   if (selected && showingOutput) return outputPage(icon, company, getTksWorksheetStatus(), simulationNote);
   return selected ? worksheetPage(icon, company) : listPage(icon);
 }
 
 export function healthPageTitle() {
+  if (selected && assessmentId) return getAssessmentDefinition(assessmentId).title;
   return !selected ? 'Tingkat Kesehatan PVML' : showingRiskAnalysis ? 'Analisis Profil Risiko' : showingOutput ? 'Output Kertas Kerja Penilaian TKS' : 'Daftar Kertas Kerja Penilaian TKS';
 }
 
 export function bindHealthPage(icon, rerender) {
+  if (selected && assessmentId) {
+    bindAssessmentPage(assessmentId, rerender);
+    document.querySelectorAll('[data-back-from-assessment]').forEach(button => button.addEventListener('click', () => {
+      assessmentId = null;
+      rerender();
+      document.querySelector(`[data-work-edit="${outputOrigin}"]`)?.focus();
+    }));
+    return;
+  }
   if (selected && showingRiskAnalysis) {
     bindRiskAnalysisPage(rerender);
     document.querySelectorAll('[data-back-from-risk]').forEach(button => button.addEventListener('click', () => {
@@ -86,8 +100,9 @@ export function bindHealthPage(icon, rerender) {
   document.querySelector('#back-to-companies')?.addEventListener('click', back);
   const openOutput = record => {
     outputOrigin = record.id;
+    assessmentId = getAssessmentDefinition(record.id) ? record.id : null;
     showingRiskAnalysis = record.id === 'risk-0';
-    showingOutput = !showingRiskAnalysis;
+    showingOutput = !showingRiskAnalysis && !assessmentId;
     rerender();
     window.scrollTo({top: 0, behavior: 'instant'});
   };

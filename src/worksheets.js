@@ -1,5 +1,6 @@
 import './worksheets.css';
 import { getRiskAnalysisStatus } from './risk-analysis.js';
+import { getAssessmentDefinition, getAssessmentStatus, getAssessmentNarrative } from './assessment.js';
 
 const groups = [
   { id:'risk', title:'Profil Risiko', items:[
@@ -31,8 +32,9 @@ const records = groups.flatMap(group => group.items.map((title,index) => ({
   note:'',
 })));
 const collapsed = new Set();
-const recordStatus = record => record.id === 'risk-0' ? getRiskAnalysisStatus() : record.status;
-export const getTksWorksheetStatus = () => records.find(record=>record.group==='tks').status;
+const recordStatus = record => record.id === 'risk-0' ? getRiskAnalysisStatus() : getAssessmentDefinition(record.id) ? getAssessmentStatus(record.id) : record.status;
+const editorLabel = record => record.id === 'risk-0' ? 'Isi Analisis Profil Risiko' : getAssessmentDefinition(record.id) ? `Isi ${record.title}` : 'Buka output penilaian TKS';
+export const getTksWorksheetStatus = () => recordStatus(records.find(record=>record.group==='tks'));
 const escapeHTML = value => value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const actionIcon = action => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${action==='view'?'<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>':'<path d="m15 4 5 5M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15Z"/>'}</svg>`;
 
@@ -41,7 +43,7 @@ function statusBadge(status) {
 }
 
 function worksheetTable(icon) {
-  return `<div class="work-table-wrap" role="region" aria-label="Daftar kertas kerja penilaian TKS" tabindex="0"><table class="work-table"><caption class="sr-only">25 kertas kerja PT Sarana Kalteng Ventura dalam lima kelompok penilaian, beserta status dan aksi.</caption><colgroup><col class="work-name-column"><col class="work-status-column"><col class="work-action-column"></colgroup><thead><tr><th scope="col">Kertas Kerja</th><th scope="col">Status</th><th scope="col">Aksi</th></tr></thead>${groups.map(group=>`<tbody><tr class="work-group-row"><th colspan="3"><button class="work-group-toggle" data-work-group="${group.id}" aria-expanded="${!collapsed.has(group.id)}" aria-controls="work-items-${group.id}">${icon('chevron')}<span>Penilaian: ${group.title}</span><small>${group.items.length} kertas kerja</small></button></th></tr></tbody><tbody id="work-items-${group.id}" ${collapsed.has(group.id)?'hidden':''}>${records.filter(record=>record.group===group.id).map(record=>`<tr class="work-item-row" data-work-row="${record.id}"><th scope="row">${record.title}</th><td>${statusBadge(recordStatus(record))}</td><td><div class="work-actions"><button class="icon-button" data-work-view="${record.id}" aria-label="Lihat ${record.title}" title="Lihat ${record.title}">${actionIcon('view')}</button><button class="icon-button" data-work-edit="${record.id}" aria-label="${record.id==='risk-0'?'Isi Analisis Profil Risiko':`Buka output penilaian TKS dari ${record.title}`}" title="${record.id==='risk-0'?'Isi Analisis Profil Risiko':'Buka output penilaian TKS'}">${actionIcon('edit')}</button></div></td></tr>`).join('')}</tbody>`).join('')}</table></div>`;
+  return `<div class="work-table-wrap" role="region" aria-label="Daftar kertas kerja penilaian TKS" tabindex="0"><table class="work-table"><caption class="sr-only">25 kertas kerja PT Sarana Kalteng Ventura dalam lima kelompok penilaian, beserta status dan aksi.</caption><colgroup><col class="work-name-column"><col class="work-status-column"><col class="work-action-column"></colgroup><thead><tr><th scope="col">Kertas Kerja</th><th scope="col">Status</th><th scope="col">Aksi</th></tr></thead>${groups.map(group=>`<tbody><tr class="work-group-row"><th colspan="3"><button class="work-group-toggle" data-work-group="${group.id}" aria-expanded="${!collapsed.has(group.id)}" aria-controls="work-items-${group.id}">${icon('chevron')}<span>Penilaian: ${group.title}</span><small>${group.items.length} kertas kerja</small></button></th></tr></tbody><tbody id="work-items-${group.id}" ${collapsed.has(group.id)?'hidden':''}>${records.filter(record=>record.group===group.id).map(record=>`<tr class="work-item-row" data-work-row="${record.id}"><th scope="row">${record.title}</th><td>${statusBadge(recordStatus(record))}</td><td><div class="work-actions"><button class="icon-button" data-work-view="${record.id}" aria-label="Lihat ${record.title}" title="Lihat ${record.title}">${actionIcon('view')}</button><button class="icon-button" data-work-edit="${record.id}" aria-label="${editorLabel(record)} · ${record.title}" title="${editorLabel(record)}">${actionIcon('edit')}</button></div></td></tr>`).join('')}</tbody>`).join('')}</table></div>`;
 }
 
 export function worksheetPage(icon,company) {
@@ -51,14 +53,16 @@ export function worksheetPage(icon,company) {
     <section class="worksheet work-directory" aria-labelledby="work-directory-title"><header class="worksheet-heading"><div><span class="worksheet-icon">${icon('book')}</span><h2 id="work-directory-title">Daftar Kertas Kerja Penilaian Tingkat Kesehatan PVML</h2></div><div class="worksheet-badges"><span class="version-badge">Versi: 1</span>${statusBadge('Dalam Proses Review')}</div></header>
       <dl class="work-metadata"><div><dt>Jenis Penilaian</dt><dd>Rutin</dd></div><div><dt>Tanggal Penyusunan</dt><dd>31 Juli 2026</dd></div><div><dt>Periode Data Self Assessment</dt><dd>${company.period}</dd></div><div><dt>Tanggal Penyampaian Self Assessment</dt><dd>27 Juli 2026</dd></div><div><dt>Posisi Data PVML</dt><dd>${company.period}</dd></div></dl>
       <div class="work-table-toolbar"><span><strong>25</strong> kertas kerja <i></i> <strong>${completed}</strong> selesai</span><button class="text-button" id="toggle-all-work-groups">${collapsed.size===groups.length?'Buka semua kelompok':'Tutup semua kelompok'}</button></div><p class="work-scroll-hint">${icon('arrow')} Geser tabel untuk melihat status dan aksi.</p>${worksheetTable(icon)}
-      <footer class="work-list-footer"><span>${icon('help')} Gunakan pensil Analisis Profil Risiko untuk mengisi analisa; pensil lainnya membuka output penilaian TKS.</span><button class="button secondary" id="back-to-companies-bottom">Kembali ke daftar perusahaan ${icon('arrow')}</button></footer>
-    </section><p class="work-demo-note">Data dan status merupakan simulasi. Narasi Analisis Profil Risiko yang disimpan tersedia kembali di browser ini.</p>`;
+      <footer class="work-list-footer"><span>${icon('help')} Gunakan pensil untuk membuka penilaian dan mengisi analisa pada kertas kerja yang tersedia.</span><button class="button secondary" id="back-to-companies-bottom">Kembali ke daftar perusahaan ${icon('arrow')}</button></footer>
+    </section><p class="work-demo-note">Data dan status merupakan simulasi. Narasi penilaian yang disimpan tersedia kembali di browser ini.</p>`;
 }
 
 function showWorksheetDialog(record,company,openOutput) {
   const root=document.querySelector('#modal-root');
   const origin=document.activeElement;
-  root.innerHTML=`<dialog class="work-dialog" aria-labelledby="work-dialog-title"><button class="icon-button work-dialog-close" aria-label="Tutup kertas kerja"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button><div class="section-tag">LIHAT KERTAS KERJA</div><h2 id="work-dialog-title">${record.title}</h2><p class="work-dialog-company">${company.name} <span>·</span> ${company.period}</p><dl class="work-view-info"><div><dt>Status</dt><dd>${statusBadge(recordStatus(record))}</dd></div><div><dt>Catatan penilaian</dt><dd class="work-view-note">${record.note?escapeHTML(record.note):'<span class="muted">Belum ada catatan penilaian.</span>'}</dd></div></dl><div class="work-dialog-buttons"><button class="button secondary" data-dialog-cancel>Tutup</button><button class="button primary" id="work-view-output">${record.id==='risk-0'?'Isi Analisis Profil Risiko':'Buka output penilaian TKS'}</button></div></dialog>`;
+  const note=getAssessmentDefinition(record.id)?getAssessmentNarrative(record.id):record.note;
+  const period=getAssessmentDefinition(record.id)?.period || company.period;
+  root.innerHTML=`<dialog class="work-dialog" aria-labelledby="work-dialog-title"><button class="icon-button work-dialog-close" aria-label="Tutup kertas kerja"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button><div class="section-tag">LIHAT KERTAS KERJA</div><h2 id="work-dialog-title">${record.title}</h2><p class="work-dialog-company">${company.name} <span>·</span> ${period}</p><dl class="work-view-info"><div><dt>Status</dt><dd>${statusBadge(recordStatus(record))}</dd></div><div><dt>Catatan penilaian</dt><dd class="work-view-note">${note?escapeHTML(note):'<span class="muted">Belum ada catatan penilaian.</span>'}</dd></div></dl><div class="work-dialog-buttons"><button class="button secondary" data-dialog-cancel>Tutup</button><button class="button primary" id="work-view-output">${editorLabel(record)}</button></div></dialog>`;
   const dialog=root.querySelector('dialog');
   dialog.showModal();
   const close=()=>dialog.close();

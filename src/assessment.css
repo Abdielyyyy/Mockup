@@ -1,0 +1,36 @@
+.assessment-detail-table { width:100%; min-width:720px; table-layout:fixed; border-collapse:collapse; color:#474752; }
+.assessment-detail-factor { width:20%; }
+.assessment-detail-table th,.assessment-detail-table td { border-right:1px solid #5d5d65; border-bottom:1px solid #5d5d65; padding:15px 13px; text-align:center; font-size:12px; line-height:1.7; }
+.assessment-detail-table tr>:last-child { border-right:0; }
+.assessment-detail-table tbody tr:last-child>* { border-bottom:0; }
+.assessment-detail-table thead th { background:#bd0000; color:white; font-weight:650; padding:19px 13px; }
+.assessment-detail-table tbody th { font-weight:600; }
+.assessment-detail-table select { font:inherit; max-width:150px; width:100%; border:1px solid #e1e1e8; border-radius:4px; padding:10px; color:#555561; background:white; cursor:pointer; }
+.assessment-detail-table select:focus-visible { outline:2px solid #d36276; outline-offset:2px; }
+.assessment-detail-table select:disabled { color:#777783; background:#f7f7f9; opacity:1; }
+.assessment-narrative-table { border:1px solid #3e3e46; border-collapse:collapse; width:100%; table-layout:fixed; margin-top:35px; }
+.assessment-narrative-table th { color:white; background:#bd0000; padding:12px; font-size:18px; font-weight:700; text-align:center; border-bottom:1px solid #3e3e46; }
+.assessment-narrative-table td { padding:15px; }
+.assessment-narrative-table textarea { display:block; width:100%; min-width:0; min-height:220px; font:inherit; font-size:12px; line-height:1.9; padding:14px; border:1px solid #e1e1e8; border-radius:4px; color:#555561; background:white; resize:vertical; }
+.assessment-narrative-table textarea::placeholder { color:#a5a5b0; }
+.assessment-narrative-table textarea:focus-visible { outline:2px solid #d36276; outline-offset:2px; }
+.assessment-narrative-table textarea[readonly] { color:#777783; background:#f7f7f9; }
+.assessment-narrative-table textarea[aria-invalid="true"] { border-color:var(--red); }
+.assessment-save-row { display:flex; align-items:center; justify-content:flex-end; gap:17px; margin-top:15px; }
+.assessment-save-row .risk-row-status { margin:0; }
+.assessment-save-row .button { min-height:38px; font-size:10px; }
+.assessment-tks-table { min-width:780px; }
+.assessment-tks-table thead th { color:#474752; background:white; font-weight:500; padding:12px; }
+.assessment-tks-table thead th small { display:block; font-weight:400; font-size:10px; margin-top:4px; }
+.assessment-tks-table thead tr:last-child th { font-size:11px; padding:7px; }
+.assessment-tks-table tbody th { text-align:left; font-weight:500; font-size:12px; }
+.assessment-tks-table tbody td { font-size:17px; padding:12px; }
+.assessment-tks-table .assessment-final-row td { background:#c6c6c8; font-size:24px; }
+.assessment-tks-table .assessment-final-row th { font-size:14px; }
+@media(max-width:650px) {
+  .assessment-narrative-table th { font-size:16px; }
+  .assessment-narrative-table td { padding:10px; }
+  .assessment-narrative-table textarea { min-height:240px; font-size:11px; padding:10px; }
+  .assessment-save-row { justify-content:space-between; gap:10px; }
+  .assessment-save-row .button { font-size:9px; padding-inline:13px; }
+}
