@@ -1,6 +1,7 @@
 import './health.css';
 import { worksheetPage, bindWorksheetPage, getTksWorksheetStatus } from './worksheets.js';
 import { outputPage, bindOutputPage } from './health-output.js';
+import { riskAnalysisPage, bindRiskAnalysisPage } from './risk-analysis.js';
 
 const company = {
   name: 'PT Sarana Kalteng Ventura',
@@ -15,12 +16,14 @@ const company = {
 
 let selected = false;
 let showingOutput = false;
+let showingRiskAnalysis = false;
 let outputOrigin = null;
 let search = '';
 
 export function resetHealthView() {
   selected = false;
   showingOutput = false;
+  showingRiskAnalysis = false;
   outputOrigin = null;
   search = '';
 }
@@ -40,15 +43,25 @@ function listPage(icon) {
 }
 
 export function healthPage(icon) {
+  if (selected && showingRiskAnalysis) return riskAnalysisPage(icon, company);
   if (selected && showingOutput) return outputPage(icon, company, getTksWorksheetStatus(), simulationNote);
   return selected ? worksheetPage(icon, company) : listPage(icon);
 }
 
 export function healthPageTitle() {
-  return !selected ? 'Tingkat Kesehatan PVML' : showingOutput ? 'Output Kertas Kerja Penilaian TKS' : 'Daftar Kertas Kerja Penilaian TKS';
+  return !selected ? 'Tingkat Kesehatan PVML' : showingRiskAnalysis ? 'Analisis Profil Risiko' : showingOutput ? 'Output Kertas Kerja Penilaian TKS' : 'Daftar Kertas Kerja Penilaian TKS';
 }
 
 export function bindHealthPage(icon, rerender) {
+  if (selected && showingRiskAnalysis) {
+    bindRiskAnalysisPage(rerender);
+    document.querySelectorAll('[data-back-from-risk]').forEach(button => button.addEventListener('click', () => {
+      showingRiskAnalysis = false;
+      rerender();
+      document.querySelector('[data-work-edit="risk-0"]')?.focus();
+    }));
+    return;
+  }
   if (selected && showingOutput) {
     bindOutputPage(icon);
     document.querySelectorAll('[data-back-to-worksheets]').forEach(button => button.addEventListener('click', () => {
@@ -73,7 +86,8 @@ export function bindHealthPage(icon, rerender) {
   document.querySelector('#back-to-companies')?.addEventListener('click', back);
   const openOutput = record => {
     outputOrigin = record.id;
-    showingOutput = true;
+    showingRiskAnalysis = record.id === 'risk-0';
+    showingOutput = !showingRiskAnalysis;
     rerender();
     window.scrollTo({top: 0, behavior: 'instant'});
   };

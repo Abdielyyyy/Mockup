@@ -1,0 +1,70 @@
+.risk-analysis-panel { border:1px solid var(--border); border-radius:9px; background:white; overflow:hidden; }
+.risk-analysis-heading { padding:22px 25px; display:flex; align-items:center; justify-content:space-between; gap:15px; border-bottom:1px solid var(--border); }
+.risk-analysis-heading .section-tag { font-size:8px; margin-bottom:9px; }
+.risk-analysis-heading h2 { font-size:19px; line-height:1.5; }
+.risk-document-status { padding:6px 10px; border-radius:4px; background:#eeeef3; color:#777783; font-size:10px; white-space:nowrap; }
+.risk-document-status.submitted { color:var(--red); background:#fcf0f2; }
+.risk-analysis-content { padding:23px 25px 27px; }
+.risk-instruction,.risk-narrative-instruction { font-size:11px; line-height:1.9; color:#868692; margin-bottom:17px; }
+.risk-scroll-hint { display:flex; align-items:center; gap:7px; font-size:9px; color:#a18d93; margin-bottom:12px; }
+.risk-scroll-hint .icon { width:14px; height:14px; }
+.risk-table-scroll { overflow:auto; border:1px solid #3e3e46; scrollbar-width:thin; position:relative; }
+.risk-table-scroll:focus-visible { outline:2px solid #d36276; outline-offset:3px; }
+.risk-comparison,.risk-overall { border-collapse:collapse; table-layout:fixed; width:100%; min-width:1040px; color:#474752; }
+.risk-name-col { width:17%; }
+.risk-comparison th,.risk-comparison td,.risk-overall th,.risk-overall td { border-right:1px solid #5d5d65; border-bottom:1px solid #5d5d65; padding:9px 7px; text-align:center; line-height:1.6; font-size:11px; }
+.risk-comparison th:last-child,.risk-comparison td:last-child,.risk-overall th:last-child,.risk-overall td:last-child { border-right:0; }
+.risk-comparison tbody tr:last-child>*,.risk-overall tbody tr:last-child>* { border-bottom:0; }
+.risk-comparison thead th,.risk-overall thead th { background:#bd0000; color:white; font-weight:650; font-size:12px; padding:14px 8px; }
+.risk-comparison tbody th { text-align:left; font-weight:500; padding-left:13px; }
+.risk-comparison select,.risk-overall select { font:inherit; color:#555561; border:1px solid #e3e3e9; border-radius:3px; background:white; width:100%; min-width:0; padding:7px 5px; cursor:pointer; }
+.risk-comparison select:focus-visible,.risk-overall select:focus-visible { outline:2px solid #d36276; outline-offset:2px; }
+.risk-overall-scroll { margin-top:25px; }
+.risk-overall { min-width:760px; }
+.risk-overall th:first-child { width:17%; }
+.risk-overall tbody th { text-align:left; padding-left:13px; font-weight:600; }
+.risk-overall select { max-width:120px; }
+.risk-narrative-instruction { margin-top:32px; }
+.risk-narratives { border:1px solid #3e3e46; border-collapse:collapse; width:100%; table-layout:fixed; }
+.risk-narratives thead th { text-align:center; background:#bd0000; color:white; padding:15px; font-size:18px; font-weight:700; }
+.risk-narratives th,.risk-narratives td { border-bottom:1px solid #5d5d65; }
+.risk-narratives .risk-narrative-title { background:#c6c6c8; color:#303039; padding:12px 15px; font-size:13px; text-align:left; font-weight:650; }
+.risk-narrative-label th { text-align:left; font-size:12px; padding:13px 15px; color:#41414c; font-weight:650; background:#fafafb; }
+.risk-narrative-row td { padding:14px 15px; vertical-align:top; }
+.risk-narrative-row textarea { display:block; font:inherit; font-size:12px; line-height:1.9; padding:12px; width:100%; min-width:0; resize:vertical; min-height:115px; border:1px solid #e1e1e8; border-radius:4px; color:#555561; background:white; }
+.risk-narrative-row textarea::placeholder { color:#a5a5b0; }
+.risk-narrative-row textarea:focus-visible { outline:2px solid #d36276; outline-offset:2px; }
+.risk-narrative-row textarea[aria-invalid="true"] { border-color:var(--red); }
+.risk-actions-col { width:130px; }
+.risk-save-cell { border-left:1px solid #e4e4eb; text-align:center; }
+.risk-save-cell .button { min-height:36px; font-size:10px; padding:9px 16px; width:100%; }
+.risk-row-status { display:block; font-size:9px; color:#a27d86; margin:7px 0 14px; line-height:1.6; }
+.risk-row-status.saved { color:#5c5c69; }
+.risk-analysis-panel button:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+.risk-narrative-row textarea[readonly],.risk-comparison select:disabled,.risk-overall select:disabled { background:#f7f7f9; opacity:1; color:#777783; }
+.risk-submit-bar { display:flex; justify-content:space-between; align-items:center; gap:22px; margin-top:25px; }
+.risk-submit-bar strong { font-size:12px; color:#646471; font-weight:600; }
+.risk-submit-bar p { color:#9a9aa5; font-size:10px; line-height:1.8; margin-top:6px; }
+.risk-submit-bar .button { font-size:11px; }
+.risk-feedback { font-size:11px; line-height:1.9; color:#666672; overflow-wrap:anywhere; }
+.risk-feedback:not(:empty) { margin-top:18px; padding:12px 15px; border:1px solid var(--border); background:#fafafb; border-radius:5px; }
+.risk-feedback.error { color:var(--red); background:#fcf0f2; border-color:#f1d9df; }
+.risk-bottom { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; margin-top:20px; }
+.risk-bottom p { font-size:9px; line-height:1.9; color:#a0a0ac; }
+.risk-bottom .button { font-size:10px; min-height:40px; white-space:nowrap; }
+@media(max-width:650px) {
+  .risk-analysis-heading { padding:20px 17px; flex-direction:column; align-items:flex-start; }
+  .risk-analysis-heading h2 { font-size:18px; }
+  .risk-analysis-content { padding:22px 15px; }
+  .risk-instruction,.risk-narrative-instruction { font-size:10px; }
+  .risk-actions-col { width:83px; }
+  .risk-narratives .risk-narrative-title { font-size:12px; padding:12px; }
+  .risk-narratives thead th { font-size:16px; }
+  .risk-narrative-label th { font-size:11px; padding:12px; }
+  .risk-narrative-row td { padding:12px 8px; }
+  .risk-narrative-row textarea { font-size:11px; padding:8px; min-height:150px; }
+  .risk-save-cell .button { font-size:9px; padding:8px; }
+  .risk-row-status { font-size:8px; }
+  .risk-submit-bar,.risk-bottom { flex-direction:column; align-items:flex-start; gap:15px; }
+  .risk-submit-bar .button { width:100%; font-size:10px; padding-inline:12px; }
+}
