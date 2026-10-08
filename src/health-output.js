@@ -28,12 +28,12 @@ function outputTable() {
 }
 
 export function outputPage(icon,company,status,simulationNote) {
-  return `<div class="work-company-bar output-company-bar"><div><span class="work-company-code">${company.code}</span><span class="work-company-type">MV</span><h1>${company.name}</h1></div><span class="work-period">${company.period}</span></div>
+  return `<button class="back-to-companies" data-back-to-worksheets>${icon('arrow')} Kembali ke daftar kertas kerja</button><div class="work-company-bar output-company-bar"><div><span class="work-company-code">${company.code}</span><span class="work-company-type">MV</span><h1>${company.name}</h1></div><span class="work-period">${company.period}</span></div>
     <section class="worksheet output-worksheet" aria-labelledby="output-worksheet-title"><header class="worksheet-heading"><div><span class="worksheet-icon">${icon('activity')}</span><h2 id="output-worksheet-title">Kertas Kerja Penilaian Tingkat Kesehatan PVML</h2></div><div class="worksheet-badges"><span class="version-badge">Versi: 1</span><span class="output-review-status"><i></i>${status}</span></div></header>
       <div class="worksheet-information">${metadata([['KR/KO',company.office],['Modal Inti',currency(company.capital)],['Total Aset',currency(company.assets)]])}${metadata([['Periode Data Self Assessment TKS',company.period],['Tanggal Penyampaian Self Assessment TKS','27 Juli 2026'],['Jenis Penilaian Self Assessment TKS','—'],['Tanggal Penyusunan','31 Juli 2026'],['Jenis Penilaian Pengawas','Rutin']])}</div>
       <div class="output-section-divider"><span>Penilaian</span></div><p class="table-scroll-hint">${icon('arrow')} Geser tabel untuk melihat seluruh kelompok penilaian.</p>${outputTable()}
       <div class="output-reference-row"><button class="text-button" id="output-rating-reference">Lihat referensi peringkat penilaian ${icon('help')}</button><span>Nilai faktor = peringkat × bobot</span></div>
-    </section>${simulationNote(icon)}<div class="output-footer"><p>Peringkat komposit mengikuti contoh gambar. Kolom abu-abu tidak berlaku atau tidak tersedia pada contoh; perhitungan peringkat otomatis sesuai ketentuan resmi PVML belum diterapkan.</p><button class="button secondary" data-page="health">Buka daftar kertas kerja ${icon('arrow')}</button></div>`;
+    </section>${simulationNote(icon)}<div class="output-footer"><p>Peringkat komposit mengikuti contoh gambar. Kolom abu-abu tidak berlaku atau tidak tersedia pada contoh; perhitungan peringkat otomatis sesuai ketentuan resmi PVML belum diterapkan.</p><button class="button secondary" data-back-to-worksheets>Kembali ke daftar kertas kerja ${icon('arrow')}</button></div>`;
 }
 
 export function bindOutputPage(icon) {

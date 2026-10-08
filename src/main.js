@@ -1,7 +1,7 @@
 import '@fontsource-variable/dm-sans';
 import '@fontsource-variable/manrope';
 import './style.css';
-import { healthPage, healthOutputPage, bindHealthPage, bindHealthOutputPage, resetHealthView } from './health.js';
+import { healthPage, healthPageTitle, bindHealthPage, resetHealthView } from './health.js';
 import { dashboardPage, bindDashboard } from './dashboard.js';
 import ojkLogo from './assets/ojk-logo.png';
 
@@ -30,9 +30,8 @@ const icons = {
 };
 const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] || icons.arrow}</svg>`;
 const brand = () => `<img class="ojk-logo" src="${ojkLogo}" alt="OJK — Otoritas Jasa Keuangan" width="1877" height="838">`;
-const pages = { home: 'Beranda', know: 'Know Your PVML', health: 'Daftar Kertas Kerja Penilaian TKS', healthOutput: 'Output Kertas Kerja Penilaian TKS' };
+const pages = { home: 'Beranda', know: 'Know Your PVML', health: 'Tingkat Kesehatan PVML' };
 let activePage = 'home';
-let healthMenuExpanded = false;
 let userName = 'Pengguna';
 try { userName = sessionStorage.getItem('pvml-user') || 'Pengguna'; } catch {}
 const escapeHTML = (value) => value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -81,7 +80,6 @@ function login() {
 function enter(name) {
   userName = name;
   activePage = 'home';
-  healthMenuExpanded = false;
   resetHealthView();
   try { sessionStorage.setItem('pvml-user', name); } catch {}
   shell();
@@ -91,9 +89,7 @@ function shell() {
   app.innerHTML = `<div class="app-layout">
     <button class="sidebar-backdrop" aria-label="Tutup navigasi"></button>
     <aside class="sidebar" aria-label="Menu utama"><a class="brand" href="#home" data-page="home">${brand()}</a>
-      <div class="nav-label">MENU UTAMA</div><nav>${['home','know'].map(key => `<button class="nav-item ${activePage === key ? 'active' : ''}" data-page="${key}">${icon(key === 'home' ? 'home' : 'book')}<span>${pages[key]}</span>${icon('chevron', 'nav-chevron')}</button>`).join('')}
-        <div class="health-nav-group"><button id="health-menu-toggle" class="nav-item health-menu-toggle" aria-expanded="${healthMenuExpanded}" aria-controls="health-submenu">${icon('activity')}<span>Tingkat Kesehatan PVML</span>${icon('chevron','nav-chevron')}</button><div id="health-submenu" class="health-submenu" ${healthMenuExpanded ? '' : 'hidden'}>${['health','healthOutput'].map(key => `<button class="nav-subitem" data-page="${key}"><span class="submenu-marker" aria-hidden="true"></span><span>${pages[key]}</span></button>`).join('')}</div></div>
-      </nav>
+      <div class="nav-label">MENU UTAMA</div><nav>${['home','know','health'].map(key => `<button class="nav-item ${activePage === key ? 'active' : ''}" data-page="${key}">${icon(key === 'home' ? 'home' : key === 'know' ? 'book' : 'activity')}<span>${pages[key]}</span>${icon('chevron', 'nav-chevron')}</button>`).join('')}</nav>
       <div class="sidebar-bottom"><button id="logout" class="logout-button">${icon('logout')} Keluar dari sistem</button><div class="sidebar-version">PENGAWASAN PVML <span>DEMO V.1.0</span></div></div>
     </aside>
     <div class="workspace"><header class="topbar"><div class="breadcrumb"><button id="mobile-menu" class="icon-button" aria-label="Buka navigasi" aria-expanded="false">${icon('menu')}</button><span>Pengawasan PVML</span>${icon('chevron')}<strong id="breadcrumb-current">${pages[activePage]}</strong></div><div class="topbar-right"><span class="demo-pill"><span></span> Mode demo</span><button class="icon-button help-button" data-help="portal" aria-label="Tentang portal">${icon('help')}</button><span class="header-separator"></span><div class="user-profile"><span class="avatar">${escapeHTML(userName.slice(0, 1).toUpperCase())}</span><span><strong>${escapeHTML(userName)}</strong><small>Akses demonstrasi</small></span></div></div></header>
@@ -107,7 +103,6 @@ function shell() {
   });
   document.querySelector('#mobile-menu').addEventListener('click', () => setSidebar(!document.querySelector('.app-layout').classList.contains('nav-open')));
   document.querySelector('.sidebar-backdrop').addEventListener('click', () => setSidebar(false));
-  document.querySelector('#health-menu-toggle').addEventListener('click', () => setHealthMenu(!healthMenuExpanded));
   document.addEventListener('keydown', sidebarEscape);
   renderPage(false);
   bindHelp();
@@ -118,13 +113,6 @@ function setSidebar(open) {
   document.querySelector('#mobile-menu')?.setAttribute('aria-expanded', String(open));
 }
 function sidebarEscape(event) { if (event.key === 'Escape') setSidebar(false); }
-
-function setHealthMenu(expanded) {
-  healthMenuExpanded = expanded;
-  document.querySelector('#health-menu-toggle').setAttribute('aria-expanded', String(expanded));
-  document.querySelector('#health-submenu').hidden = !expanded;
-}
-
 
 function knowPage() {
   const sectors = [
@@ -140,13 +128,11 @@ function knowPage() {
 }
 
 function renderPage(focus = true) {
-  document.querySelector('#page-content').innerHTML = activePage === 'home' ? dashboardPage(icon) : activePage === 'know' ? knowPage() : activePage === 'healthOutput' ? healthOutputPage(icon) : healthPage(icon);
-  document.querySelector('#breadcrumb-current').textContent = pages[activePage];
-  document.title = `${pages[activePage]} — Sistem Pengawasan PVML`;
-  const healthActive = activePage === 'health' || activePage === 'healthOutput';
-  document.querySelector('#health-menu-toggle').classList.toggle('active', healthActive);
-  if (healthActive) setHealthMenu(true);
-  document.querySelectorAll('.nav-item[data-page], .nav-subitem').forEach(button => {
+  document.querySelector('#page-content').innerHTML = activePage === 'home' ? dashboardPage(icon) : activePage === 'know' ? knowPage() : healthPage(icon);
+  const title = activePage === 'health' ? healthPageTitle() : pages[activePage];
+  document.querySelector('#breadcrumb-current').textContent = title;
+  document.title = `${title} — Sistem Pengawasan PVML`;
+  document.querySelectorAll('.nav-item[data-page]').forEach(button => {
     const selected = button.dataset.page === activePage;
     button.classList.toggle('active', selected);
     if (selected) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
@@ -160,7 +146,6 @@ function renderPage(focus = true) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   });
   if (activePage === 'health') bindHealthPage(icon, renderPage);
-  if (activePage === 'healthOutput') bindHealthOutputPage(icon);
   if (activePage === 'home') bindDashboard(renderPage);
   if (focus) document.querySelector('#page-content').focus({ preventScroll: true });
 }
