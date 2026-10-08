@@ -3,6 +3,7 @@ import '@fontsource-variable/manrope';
 import './style.css';
 import { healthPage, healthPageTitle, bindHealthPage, resetHealthView } from './health.js';
 import { dashboardPage, bindDashboard } from './dashboard.js';
+import { supervisoryPage, bindSupervisoryPage } from './supervisory.js';
 import ojkLogo from './assets/ojk-logo.png';
 
 const app = document.querySelector('#app');
@@ -30,7 +31,7 @@ const icons = {
 };
 const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] || icons.arrow}</svg>`;
 const brand = () => `<img class="ojk-logo" src="${ojkLogo}" alt="OJK — Otoritas Jasa Keuangan" width="1877" height="838">`;
-const pages = { home: 'Beranda', know: 'Know Your PVML', health: 'Tingkat Kesehatan PVML' };
+const pages = { home: 'Beranda', know: 'Know Your PVML', health: 'Tingkat Kesehatan PVML', supervisory: 'Supervisory Plan' };
 let activePage = 'home';
 let userName = 'Pengguna';
 try { userName = sessionStorage.getItem('pvml-user') || 'Pengguna'; } catch {}
@@ -89,7 +90,7 @@ function shell() {
   app.innerHTML = `<div class="app-layout">
     <button class="sidebar-backdrop" aria-label="Tutup navigasi"></button>
     <aside class="sidebar" aria-label="Menu utama"><a class="brand" href="#home" data-page="home">${brand()}</a>
-      <div class="nav-label">MENU UTAMA</div><nav>${['home','know','health'].map(key => `<button class="nav-item ${activePage === key ? 'active' : ''}" data-page="${key}">${icon(key === 'home' ? 'home' : key === 'know' ? 'book' : 'activity')}<span>${pages[key]}</span>${icon('chevron', 'nav-chevron')}</button>`).join('')}</nav>
+      <div class="nav-label">MENU UTAMA</div><nav>${['home','know','health','supervisory'].map(key => `<button class="nav-item ${activePage === key ? 'active' : ''}" data-page="${key}">${icon(key === 'home' ? 'home' : key === 'know' ? 'book' : key === 'health' ? 'activity' : 'shield')}<span>${pages[key]}</span>${icon('chevron', 'nav-chevron')}</button>`).join('')}</nav>
       <div class="sidebar-bottom"><button id="logout" class="logout-button">${icon('logout')} Keluar dari sistem</button><div class="sidebar-version">PENGAWASAN PVML <span>DEMO V.1.0</span></div></div>
     </aside>
     <div class="workspace"><header class="topbar"><div class="breadcrumb"><button id="mobile-menu" class="icon-button" aria-label="Buka navigasi" aria-expanded="false">${icon('menu')}</button><span>Pengawasan PVML</span>${icon('chevron')}<strong id="breadcrumb-current">${pages[activePage]}</strong></div><div class="topbar-right"><span class="demo-pill"><span></span> Mode demo</span><button class="icon-button help-button" data-help="portal" aria-label="Tentang portal">${icon('help')}</button><span class="header-separator"></span><div class="user-profile"><span class="avatar">${escapeHTML(userName.slice(0, 1).toUpperCase())}</span><span><strong>${escapeHTML(userName)}</strong><small>Akses demonstrasi</small></span></div></div></header>
@@ -128,7 +129,7 @@ function knowPage() {
 }
 
 function renderPage(focus = true) {
-  document.querySelector('#page-content').innerHTML = activePage === 'home' ? dashboardPage(icon) : activePage === 'know' ? knowPage() : healthPage(icon);
+  document.querySelector('#page-content').innerHTML = activePage === 'home' ? dashboardPage(icon) : activePage === 'know' ? knowPage() : activePage === 'supervisory' ? supervisoryPage(icon) : healthPage(icon);
   const title = activePage === 'health' ? healthPageTitle() : pages[activePage];
   document.querySelector('#breadcrumb-current').textContent = title;
   document.title = `${title} — Sistem Pengawasan PVML`;
@@ -147,6 +148,7 @@ function renderPage(focus = true) {
   });
   if (activePage === 'health') bindHealthPage(icon, renderPage);
   if (activePage === 'home') bindDashboard(renderPage);
+  if (activePage === 'supervisory') bindSupervisoryPage(icon, renderPage);
   if (focus) document.querySelector('#page-content').focus({ preventScroll: true });
 }
 
